@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import kaaes.spotify.webapi.android.SpotifyApi;
+import kaaes.spotify.webapi.android.SpotifyError;
 import kaaes.spotify.webapi.android.SpotifyService;
 import kaaes.spotify.webapi.android.models.Artist;
 import kaaes.spotify.webapi.android.models.ArtistsPager;
@@ -123,6 +124,7 @@ public class NetworkFragment extends Fragment {
                     return;
                 }
 
+                //For better error message than generic one
                 mArtistList.clear();
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
@@ -171,11 +173,13 @@ public class NetworkFragment extends Fragment {
 
             @Override
             public void failure(final RetrofitError error) {
+                //For better error message than generic one (like Invalid country code)
+                final SpotifyError spotifyError = SpotifyError.fromRetrofitError(error);
                 mTopTracksList.clear();
                 getActivity().runOnUiThread(new Runnable() {
                     public void run() {
                         if (onTracksResult != null) {
-                            onTracksResult.onNetworkError(error.getMessage());
+                            onTracksResult.onNetworkError(spotifyError.getMessage());
                         }
                     }
                 });
