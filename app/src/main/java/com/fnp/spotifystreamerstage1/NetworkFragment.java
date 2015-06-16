@@ -198,4 +198,11 @@ public class NetworkFragment extends Fragment {
     public List<Track> getTopTracksList() {
         return mTopTracksList;
     }
+
+    /**
+     * @return the current artist type for the user
+     */
+    public String getCurrentArtistName (){
+        return mCurrentArtist;
+    }
 }

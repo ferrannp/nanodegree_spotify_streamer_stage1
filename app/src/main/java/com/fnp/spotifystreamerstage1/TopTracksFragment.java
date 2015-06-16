@@ -18,7 +18,6 @@ import kaaes.spotify.webapi.android.models.Track;
 
 public class TopTracksFragment extends Fragment{
 
-    private ListView mListView;
     private TopTracksAdapter topTracksAdapter;
     private LinearLayout mWarningView;
     private TextView mWarningTitle, mWarningMessage;
@@ -31,10 +30,17 @@ public class TopTracksFragment extends Fragment{
                              Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_top_tracks, container, false);
-        mListView = (ListView) v.findViewById(R.id.listview);
+        ListView mListView = (ListView) v.findViewById(R.id.listview);
         mWarningView = (LinearLayout) v.findViewById(R.id.warning_view);
         mWarningTitle = (TextView) v.findViewById(R.id.warning_title);
         mWarningMessage = (TextView) v.findViewById(R.id.warning_message);
+
+        topTracksAdapter = new TopTracksAdapter(getActivity(), R.layout.track_item);
+        if(savedInstanceState != null){
+            addTopTracks(); //We might have already (in case Activity got destroyed)
+        }
+        mListView.setAdapter(topTracksAdapter);
+
         return v;
     }
 
@@ -43,11 +49,21 @@ public class TopTracksFragment extends Fragment{
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        topTracksAdapter = new TopTracksAdapter(getActivity(), R.layout.track_item);
-        mListView.setAdapter(topTracksAdapter);
+        if(savedInstanceState == null) { //Only needed the first time
+            MainActivity.getNetworkFragment().searchTopTracks
+                    (((TopTracksActivity) getActivity()).getArtistId());
+        }
+    }
 
-        MainActivity.getNetworkFragment().searchTopTracks
-                (((TopTracksActivity) getActivity()).getArtistId());
+    private void addTopTracks(){
+        List<Track> trackList = ((TopTracksActivity) getActivity()).getTopTracksList();
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
+            topTracksAdapter.addAll(trackList);
+        } else {
+            for (Track track : trackList) {
+                topTracksAdapter.add(track);
+            }
+        }
     }
 
     public void onNetworkSuccess(){
@@ -60,13 +76,7 @@ public class TopTracksFragment extends Fragment{
             mWarningMessage.setVisibility(View.GONE); //No need to redefine the search here
         }
         else {
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
-                topTracksAdapter.addAll(trackList);
-            } else {
-                for (Track track : trackList) {
-                    topTracksAdapter.add(track);
-                }
-            }
+            addTopTracks();
         }
     }
 

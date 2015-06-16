@@ -44,15 +44,19 @@ public class ArtistFragment extends Fragment {
         mWarningView = (LinearLayout) v.findViewById(R.id.warning_view);
         mWarningTitle = (TextView) v.findViewById(R.id.warning_title);
         mWarningMessage = (TextView) v.findViewById(R.id.warning_message);
+
+        mArtistArrayAdapter = new ArtistArrayAdapter(getActivity(), R.layout.artist_item);
+        if(savedInstanceState != null){
+            addArtists(); //We might have already (in case Activity got destroyed)
+        }
+        mListView.setAdapter(mArtistArrayAdapter);
+
         return v;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        mArtistArrayAdapter = new ArtistArrayAdapter(getActivity(), R.layout.artist_item);
-        mListView.setAdapter(mArtistArrayAdapter);
 
         mSearchEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -61,8 +65,10 @@ public class ArtistFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                MainActivity.getNetworkFragment().searchArtists(s.toString());
-
+                //This condition will avoid query for the same in cases like a device rotation
+                if(!s.toString().equals(MainActivity.getNetworkFragment().getCurrentArtistName())) {
+                    MainActivity.getNetworkFragment().searchArtists(s.toString());
+                }
             }
 
             @Override
@@ -83,9 +89,7 @@ public class ArtistFragment extends Fragment {
         });
     }
 
-    public void onNetworkSuccess(){
-
-        mArtistArrayAdapter.clear(); //Clear old values
+    private void addArtists(){
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
             mArtistArrayAdapter.addAll(MainActivity.getNetworkFragment().getArtistList());
         }else{
@@ -93,6 +97,12 @@ public class ArtistFragment extends Fragment {
                 mArtistArrayAdapter.add(artist);
             }
         }
+    }
+
+    public void onNetworkSuccess(){
+
+        mArtistArrayAdapter.clear(); //Clear old values
+        addArtists();
 
         if(mArtistArrayAdapter.getCount() == 0){
             mWarningTitle.setText(String.format(getString(R.string.no_results_found),

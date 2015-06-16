@@ -10,7 +10,6 @@ import kaaes.spotify.webapi.android.models.Track;
 
 public class TopTracksActivity extends AppCompatActivity implements NetworkFragment.onTracksResult{
 
-    private NetworkFragment networkFragment;
     private String artistId, artistName;
     private TopTracksFragment topTracksFragment;
 
@@ -25,8 +24,6 @@ public class TopTracksActivity extends AppCompatActivity implements NetworkFragm
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setSubtitle(artistName);
 
-        networkFragment = MainActivity.getNetworkFragment();
-
         topTracksFragment = (TopTracksFragment)
                 getSupportFragmentManager().findFragmentById(R.id.fragment);
     }
@@ -34,13 +31,14 @@ public class TopTracksActivity extends AppCompatActivity implements NetworkFragm
     @Override
     public void onStart(){
         super.onStart();
-        networkFragment.setOnTracksResult(this); //Listener for our NetworkFragment!
+        //Listener for our NetworkFragment!
+        MainActivity.getNetworkFragment().setOnTracksResult(this);
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        networkFragment.setOnTracksResult(null); //Stop listening
+        MainActivity.getNetworkFragment().setOnTracksResult(null); //Stop listening
     }
 
     @Override
@@ -63,7 +61,7 @@ public class TopTracksActivity extends AppCompatActivity implements NetworkFragm
     }
 
     public List<Track> getTopTracksList(){
-        return networkFragment.getTopTracksList();
+        return MainActivity.getNetworkFragment().getTopTracksList();
     }
 
     @Override
