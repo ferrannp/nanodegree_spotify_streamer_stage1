@@ -39,7 +39,7 @@ public class NetworkFragment extends Fragment {
     private List<Track> mTopTracksList;
     private onArtistsResult onArtistsResult;
     private onTracksResult onTracksResult;
-    private String mCurrentArtist;
+    private String mCurrentArtist = "";
 
     public interface onArtistsResult {
         void onNetworkSuccess();
