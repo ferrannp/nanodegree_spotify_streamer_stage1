@@ -20,9 +20,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity implements
             setContentView(R.layout.settings_activity);
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
-            getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         addPreferencesFromResource(R.xml.pref_general); //Here because we support API >= 7
         bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_country_key)));
