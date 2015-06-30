@@ -55,7 +55,11 @@ public class ArtistArrayAdapter extends ArrayAdapter<Artist> {
                     .load(imageUrl)
                     .resizeDimen(R.dimen.cover_size, R.dimen.cover_size)
                     .into(viewHolder.artistImageView);
+        }else{ //Placeholder if no image
+            viewHolder.artistImageView.setImageDrawable(getContext()
+                    .getResources().getDrawable(R.drawable.ic_music_note_white_36dp));
         }
+
         viewHolder.artistTextView.setText(artist.name);
 
         return convertView;

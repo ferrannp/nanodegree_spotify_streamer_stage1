@@ -57,6 +57,9 @@ public class TopTracksAdapter extends ArrayAdapter<Track> {
                     .load(imageUrl)
                     .resizeDimen(R.dimen.cover_size, R.dimen.cover_size)
                     .into(viewHolder.albumImageView);
+        }else{ //Placeholder if no image
+            viewHolder.albumImageView.setImageDrawable(getContext()
+                    .getResources().getDrawable(R.drawable.ic_album_white_36dp));
         }
 
         viewHolder.albumTextView.setText(track.album.name);

@@ -10,6 +10,7 @@
         android:id="@+id/album_imageview"
         android:layout_width="64dp"
         android:layout_height="64dp"
+        android:scaleType="centerInside"
         android:contentDescription="@string/accessibility_track_thumbnail" />
 
     <LinearLayout

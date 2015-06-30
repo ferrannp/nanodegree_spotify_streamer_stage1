@@ -9,6 +9,7 @@
     <ImageView
         android:id="@+id/artist_imageview"
         android:contentDescription="@string/accessibility_artist_thumbnail"
+        android:scaleType="centerInside"
         android:layout_width="64dp"
         android:layout_height="64dp"/>
 
