@@ -1,7 +1,7 @@
 # nanodegree_spotify_streamer_stage1
 First stage of the Spotify Streamer project.
 
-## Autor
+## Author
 [Ferran Negre Pizarro](https://profiles.udacity.com/u/ferrannegre)
 
 ## Screenshots
